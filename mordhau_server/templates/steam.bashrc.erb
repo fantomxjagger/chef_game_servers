@@ -1,0 +1,16 @@
+# .bashrc
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+
+export PS1="\e[0;32m[\u@chef_host \W]\$ \e[m "
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# User specific aliases and functions
+
+alias update_mordhau='/home/Steam/steamcmd.sh +login anonymous +runscript update_mordhau.txt'
