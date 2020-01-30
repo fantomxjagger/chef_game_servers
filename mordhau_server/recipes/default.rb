@@ -121,11 +121,4 @@ service 'MordhauServer' do
   action mordhau_service
 end
 
-# Yum Repos for any shit unrelated to this
-template '/etc/yum.repos.d/rpmfusion-free-updates.repo' do # ~FC033
-  source 'rpmfusion-free-updates.repo.erb'
-end
-
-template '/etc/yum.repos.d/rpmfusion-nonfree-updates.repo' do # ~FC033
-  source 'rpmfusion-nonfree-updates.repo.erb'
-end
+include mordhau_server::yum_repos
