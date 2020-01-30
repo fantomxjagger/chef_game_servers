@@ -121,4 +121,4 @@ service 'MordhauServer' do
   action mordhau_service
 end
 
-include mordhau_server.yum_repos
+include mordhau_server::yum_repos
