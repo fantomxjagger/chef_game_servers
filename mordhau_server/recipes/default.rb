@@ -84,22 +84,12 @@ execute 'FirstTime_Mordhau_Install' do
   not_if { ::File.exist?("#{steam_home}/mordhau/MordhauServer.sh") }
 end
 
-# Now that the Mordhau Folder is installed, it will create the initial run script
-template "#{steam_home}/mordhau/initial.mordhau.run.sh" do
-  source 'initial.mordhau.run.erb'
+directory "#{steam_home}/mordhau/Mordhau/Saved/Config/LinuxServer" do
   owner steam_user
   group steam_group
-  mode '0755'
+  recursive true
+  action :create
 end
-
-# Now it will run the initial script
-execute 'Initial_Mordhau_Run' do
-  command 'nohup ./MordhauServer.sh & sleep 10 && pkill -9 Mordhau'
-  cwd "#{steam_home}/mordhau"
-  owner steam_user
-  group steam_group
-end
-
 # Now that the initial script ran it will generate the files below, and now the template will edit them.
 template "#{steam_home}/mordhau/Mordhau/Saved/Config/LinuxServer/Game.ini" do
   source 'Game.ini.erb'
