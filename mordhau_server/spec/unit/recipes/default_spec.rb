@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 #
 # Cookbook Name:: learn_chef_httpd
 # Spec:: default
