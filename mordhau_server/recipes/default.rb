@@ -22,6 +22,7 @@ steam_home = node['mordhau']['steam']['user_home']
 steam_tar = node['mordhau']['steam']['steam_cmd_package']
 steam_url = "#{node['mordhau']['steam']['steam_cmd_url_root']}#{steam_tar}"
 mordhau_service = node['mordhau']['steam']['server']['status']
+mordhau_config_dir = node['mordhau']['steam']['server']['config_dir']
 
 # create steam user and home directory
 user steam_user do
@@ -38,20 +39,21 @@ directory steam_home do
   action :create
 end
 
-# setpu environment profile for steam user
-template "#{steam_home}/.bashrc" do
-  source 'steam.bashrc.erb'
+directory mordhau_config_dir do
   owner steam_user
   group steam_group
-  mode '0644'
+  recursive true
+  action :create
 end
 
-template "#{steam_home}/.bash_profile" do
-  source 'steam.bash_profile.erb'
-  owner steam_user
-  group steam_group
-  mode '0644'
-end
+templates = node['mordhau']['templates']
+templates.each do |template,details|
+  template details['target'] do
+    source details['source']
+    owner steam_user
+    group steam_group
+    mode details['mode']
+  end
 
 # Doenload and extract the steamcmd.sh
 tar_extract steam_url do
@@ -67,14 +69,6 @@ file "#{steam_home}/steamcmd.sh" do
   mode '0755'
 end
 
-# ./steamcmd.sh +login anonymous +runscript update_mordhau.txt
-template "#{steam_home}/update_mordhau.txt" do # ~FC033
-  source 'update_mordhau.txt.erb'
-  owner steam_user
-  group steam_group
-end
-
-# Mordhau's Server files and get Packages
 # For Every other update, this job will run in cron once weekly or otherwise.
 execute 'FirstTime_Mordhau_Install' do
   command './steamcmd.sh +login anonymous +runscript update_mordhau.txt'
@@ -82,25 +76,6 @@ execute 'FirstTime_Mordhau_Install' do
   owner steam_user
   group steam_group
   not_if { ::File.exist?("#{steam_home}/mordhau/MordhauServer.sh") }
-end
-
-directory "#{steam_home}/mordhau/Mordhau/Saved/Config/LinuxServer" do
-  owner steam_user
-  group steam_group
-  recursive true
-  action :create
-end
-
-template "#{steam_home}/mordhau/Mordhau/Saved/Config/LinuxServer/Game.ini" do
-  source 'Game.ini.erb'
-  owner steam_user
-  group steam_group
-end
-
-template "#{steam_home}/mordhau/Mordhau/Saved/Config/LinuxServer/Engine.ini" do
-  source 'Engine.ini.erb'
-  owner steam_user
-  group steam_group
 end
 
 # Now it actually starts the Mordhau game server
@@ -111,4 +86,4 @@ service 'MordhauServer' do
   action mordhau_service
 end
 
-include mordhau_server::yum_repos
+include 'mordhau_server::yum_repos'
