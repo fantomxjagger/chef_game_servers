@@ -94,7 +94,7 @@ end
 
 # Now it will run the initial script
 execute 'Initial_Mordhau_Run' do
-  command './initial.mordhau.run.sh'
+  command 'nohup ./MordhauServer.sh & sleep 10 && pkill -9 Mordhau'
   cwd "#{steam_home}/mordhau"
   owner steam_user
   group steam_group
