@@ -90,7 +90,7 @@ directory "#{steam_home}/mordhau/Mordhau/Saved/Config/LinuxServer" do
   recursive true
   action :create
 end
-# Now that the initial script ran it will generate the files below, and now the template will edit them.
+
 template "#{steam_home}/mordhau/Mordhau/Saved/Config/LinuxServer/Game.ini" do
   source 'Game.ini.erb'
   owner steam_user
