@@ -39,7 +39,7 @@ directories.each do |directory|
     group steam_group
     recursive true
     mode '0755'
-    action :create
+    action :create_if_missing
   end
 end
 
@@ -50,6 +50,7 @@ templates.each do |template,details|
     owner steam_user
     group steam_group
     mode details['mode']
+    action create_if_missing
   end
 end
 
