@@ -1,20 +1,20 @@
 [/Script/Mordhau.MordhauGameMode]
-PlayerRespawnTime=5.000000
-AutoKickOnTeamKillAmount=5
-BallistaRespawnTime=30.000000
-CatapultRespawnTime=30.000000
-HorseRespawnTime=30.000000
-DamageFactor=1.000000
-TeamDamageFactor=0.500000
-TeamDamageFlinch=0
-MapRotation=FFA_Contraband
+PlayerRespawnTime=<%= node['mordhau']['steam']['server']['game_mode']['playerrespawntime'] =%>
+AutoKickOnTeamKillAmount=<%= node['mordhau']['steam']['server']['game_mode']['autokickonteamkillamount'] =%>
+BallistaRespawnTime=<%= node['mordhau']['steam']['server']['game_mode']['ballistarespawntime'] =%>
+CatapultRespawnTime=<%= node['mordhau']['steam']['server']['game_mode']['catapultrespawntime'] =%>
+HorseRespawnTime=<%= node['mordhau']['steam']['server']['game_mode']['horserespawntime'] =%>
+DamageFactor=<%= node['mordhau']['steam']['server']['game_mode']['damagefactor'] =%>
+TeamDamageFactor=<%= node['mordhau']['steam']['server']['game_mode']['teamdamagefactor'] =%>
+TeamDamageFlinch=<%= node['mordhau']['steam']['server']['game_mode']['teamdamageflinch'] =%>
+MapRotation=<%= node['mordhau']['steam']['server']['game_mode']['maprotation'] =%>
 
 [/Script/Mordhau.MordhauGameSession]
-MaxSlots=16
-ServerName=Chaos LightSaber Battles
-ServerPassword=
-ServerModAuthToken=
-AdminPassword=chaos
-Admins=76561198068956531
-BannedPlayers=()
-MutedPlayers=()
+MaxSlots=<%= node['mordhau']['steam']['server']['game_session']['maxslots'] =%>
+ServerName=<%= node['mordhau']['steam']['server']['game_session']['servername'] =%>
+ServerPassword=<%= node['mordhau']['steam']['server']['game_session']['serverpassword'] =%>
+ServerModAuthToken=<%= node['mordhau']['steam']['server']['game_session']['servermodauthtoken'] =%>
+AdminPassword=<%= node['mordhau']['steam']['server']['game_session']['adminpassword'] =%>
+Admins= <%= node['mordhau']['steam']['server']['game_session']['admins'] =%>
+BannedPlayers=<%= node['mordhau']['steam']['server']['game_session']['bannedplayers'] =%>
+MutedPlayers<%= node['mordhau']['steam']['server']['game_session']['mutedplayers'] =%>
