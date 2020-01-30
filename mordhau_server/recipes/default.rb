@@ -5,9 +5,13 @@
 # Recipe:: default
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
-package 'glibc.i686'
-package 'libstdc++.i686'
-package 'firewalld'
+packages = node['mordhau']['os_pkgs']
+packages.each do |_pkg, details|
+  yum_package details['pkgname'] do
+    action :install
+    version details['pkgver'] if details['pkgver']
+  end
+end
 
 # Firewall Rules needed - Open 7777,7778,1500 UDP
 #setup variables
@@ -17,6 +21,7 @@ steam_shell = node['mordhau']['steam']['user_shell']
 steam_home = node['mordhau']['steam']['user_home']
 steam_tar = node['mordhau']['steam']['steam_cmd_package']
 steam_url = "#{node['mordhau']['steam']['steam_cmd_url_root']}#{steam_tar}"
+mordhau_service = node['mordhau']['steam']['server']['status']
 
 #create steam user and home directory
 user steam_user do
@@ -113,7 +118,7 @@ service 'MordhauServer' do
   start_command 'nohup ./MordhauServer.sh &'
   stop_command 'pkill -9 MordhauServer.sh'
   restart_command 'pkill -9 MordhauServer.sh && nohup ./MordhauServer.sh & || nohup ./MordhauServer.sh &'
-  action :start
+  action mordhau_service
 end
 
 # Yum Repos for any shit unrelated to this
