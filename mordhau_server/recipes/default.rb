@@ -54,7 +54,7 @@ templates.each do |template,details|
     group steam_group
     mode details['mode']
   end
-
+end
 # Doenload and extract the steamcmd.sh
 tar_extract steam_url do
   owner steam_user
