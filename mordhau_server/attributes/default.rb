@@ -7,9 +7,9 @@
 # Server build
 
 default['mordhau']['os_pkgs'] = {
-  'glibc': {'pkgname': 'glibc'},
-  'libstdc++': {'pkgname': 'libstdc++'},
-  'firewalld': {'pkgname': 'firewalld'}
+  'glibc': { 'pkgname': 'glibc' },
+  'libstdc++': { 'pkgname': 'libstdc++' },
+  'firewalld': { 'pkgname': 'firewalld' }
 }
 default['mordhau']['steam']['user'] = 'steam'
 default['mordhau']['steam']['group'] = 'steam'

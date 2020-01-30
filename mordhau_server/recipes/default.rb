@@ -14,7 +14,7 @@ packages.each do |_pkg, details|
 end
 
 # Firewall Rules needed - Open 7777,7778,1500 UDP
-#setup variables
+# setup variables
 steam_user = node['mordhau']['steam']['user']
 steam_group = node['mordhau']['steam']['group']
 steam_shell = node['mordhau']['steam']['user_shell']
@@ -23,7 +23,7 @@ steam_tar = node['mordhau']['steam']['steam_cmd_package']
 steam_url = "#{node['mordhau']['steam']['steam_cmd_url_root']}#{steam_tar}"
 mordhau_service = node['mordhau']['steam']['server']['status']
 
-#create steam user and home directory
+# create steam user and home directory
 user steam_user do
   comment steam_user
   home steam_home
@@ -38,7 +38,7 @@ directory steam_home do
   action :create
 end
 
-#setpu environment profile for steam user
+# setpu environment profile for steam user
 template "#{steam_home}/.bashrc" do
   source 'steam.bashrc.erb'
   owner steam_user
@@ -53,7 +53,7 @@ template "#{steam_home}/.bash_profile" do
   mode '0644'
 end
 
-#Doenload and extract the steamcmd.sh
+# Doenload and extract the steamcmd.sh
 tar_extract steam_url do
   owner steam_user
   group steam_group
@@ -121,4 +121,4 @@ service 'MordhauServer' do
   action mordhau_service
 end
 
-include mordhau_server::yum_repos
+include mordhau_server.yum_repos
