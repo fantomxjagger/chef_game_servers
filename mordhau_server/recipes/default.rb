@@ -5,15 +5,8 @@
 # Recipe:: default
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
-packages = node['mordhau']['os_pkgs']
-packages.each do |_pkg, details|
-  yum_package details['pkgname'] do
-    action :install
-    version details['pkgver'] if details['pkgver']
-  end
-end
-
 # Firewall Rules needed - Open 7777,7778,1500 UDP
+
 # setup variables
 steam_user = node['mordhau']['steam']['user']
 steam_group = node['mordhau']['steam']['group']
@@ -24,7 +17,14 @@ steam_url = "#{node['mordhau']['steam']['steam_cmd_url_root']}#{steam_tar}"
 mordhau_service = node['mordhau']['steam']['server']['status']
 mordhau_config_dir = node['mordhau']['steam']['server']['config_dir']
 
-# create steam user and home directory
+packages = node['mordhau']['os_pkgs']
+packages.each do |_pkg, details|
+  yum_package details['pkgname'] do
+    action :install
+    version details['pkgver'] if details['pkgver']
+  end
+end
+
 user steam_user do
   comment steam_user
   home steam_home
@@ -32,18 +32,15 @@ user steam_user do
   password 'steam'
 end
 
-directory steam_home do
-  owner steam_user
-  group steam_group
-  mode '0755'
-  action :create
-end
-
-directory mordhau_config_dir do
-  owner steam_user
-  group steam_group
-  recursive true
-  action :create
+directories = "#{steam_home} #{mordhau_config_dir}"
+directories.each do |directory|
+  directory directory do
+    owner steam_user
+    group steam_group
+    recursive true
+    mode '0755'
+    action :create
+  end
 end
 
 templates = node['mordhau']['templates']
@@ -55,7 +52,8 @@ templates.each do |template,details|
     mode details['mode']
   end
 end
-# Doenload and extract the steamcmd.sh
+
+# Download and extract the steamcmd.sh
 tar_extract steam_url do
   owner steam_user
   group steam_group
