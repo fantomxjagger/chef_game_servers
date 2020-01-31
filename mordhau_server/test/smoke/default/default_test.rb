@@ -11,10 +11,6 @@ unless os.windows?
   end
 end
 
-describe user('steam') do
-  it { should exist }
-end
-
 describe port(80) do
   it { should be_listening }
 end

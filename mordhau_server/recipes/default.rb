@@ -1,7 +1,5 @@
-# frozen_string_literal: true
-
 #
-# Cookbook Name:: mordhau_server
+# Cookbook Name:: learn_chef_httpd
 # Recipe:: default
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
@@ -71,10 +69,10 @@ end
 # For Every other update, this job will run in cron once weekly or otherwise.
 execute 'FirstTime_Mordhau_Install' do
   command './steamcmd.sh +login anonymous +runscript update_mordhau.txt'
-  cwd "#{steam_home}/"
-  owner steam_user
-  group steam_group
-  not_if { ::File.exist?("#{steam_home}/mordhau/MordhauServer.sh") }
+  cwd '/home/Steam/'
+  user 'steam'
+  group 'steam'
+  not_if { ::File.exists?('/home/Steam/mordhau/MordhauServer.sh')}
 end
 
 # Now it actually starts the Mordhau game server
