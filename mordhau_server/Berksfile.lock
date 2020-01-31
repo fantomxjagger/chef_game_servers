@@ -1,0 +1,9 @@
+DEPENDENCIES
+  mordhau_server
+    path: .
+    metadata: true
+
+GRAPH
+  mordhau_server (0.3.26)
+    tar (>= 0.0.0)
+  tar (2.2.0)
