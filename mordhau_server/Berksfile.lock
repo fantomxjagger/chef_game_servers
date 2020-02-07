@@ -4,6 +4,8 @@ DEPENDENCIES
     metadata: true
 
 GRAPH
-  mordhau_server (0.3.26)
+  mordhau_server (0.3.25)
     tar (>= 0.0.0)
+    yum (>= 0.0.0)
   tar (2.2.0)
+  yum (5.1.0)

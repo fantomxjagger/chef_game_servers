@@ -13,7 +13,6 @@ steam_home = node['mordhau']['steam']['user_home']
 steam_tar = node['mordhau']['steam']['steam_cmd_package']
 steam_url = "#{node['mordhau']['steam']['steam_cmd_url_root']}#{steam_tar}"
 mordhau_service = node['mordhau']['steam']['server']['status']
-mordhau_config_dir = node['mordhau']['steam']['server']['config_dir']
 
 packages = node['mordhau']['os_pkgs']
 packages.each do |_pkg, details|
@@ -30,26 +29,13 @@ user steam_user do
   password 'steam'
 end
 
-directories = "#{steam_home} #{mordhau_config_dir}"
-directories.each do |directory|
-  directory directory do
-    owner steam_user
-    group steam_group
-    recursive true
-    mode '0755'
-    action :create_if_missing
-  end
-end
 
-templates = node['mordhau']['templates']
-templates.each do |template,details|
-  template details['target'] do
-    source details['source']
-    owner steam_user
-    group steam_group
-    mode details['mode']
-    action create_if_missing
-  end
+directory steam_home do
+  owner steam_user
+  group steam_group
+  recursive true
+  mode '0755'
+  action :create_if_missing
 end
 
 # Download and extract the steamcmd.sh
@@ -73,6 +59,17 @@ execute 'FirstTime_Mordhau_Install' do
   user 'steam'
   group 'steam'
   not_if { ::File.exists?('/home/Steam/mordhau/MordhauServer.sh')}
+end
+
+templates = node['mordhau']['templates']
+templates.each do |_template,details|
+  template details['target'] do
+    source details['source']
+    owner steam_user
+    group steam_group
+    mode details['mode']
+    action create_if_missing
+  end
 end
 
 # Now it actually starts the Mordhau game server
