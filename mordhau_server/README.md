@@ -13,7 +13,7 @@ Edit the Attributes if you'd like to change the settings of the config files.
 
 Firewall Rules needed - Open 7777,7778,1500 UDP
 
-# Cookbook Name:: mordhau_server
-# Recipe:: default
-# Copyright (c) 2020 Zach Degelau & Jesse Zitterkopf, All Rights Reserved.
-# Server build
+Cookbook Name:: mordhau_server
+Recipe:: default
+Copyright (c) 2020 Zach Degelau & Jesse Zitterkopf, All Rights Reserved.
+Server build
