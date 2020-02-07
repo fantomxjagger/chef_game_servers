@@ -92,7 +92,7 @@ service 'MordhauServer' do
   start_command "nohup #{mordhau_root_dir}/MordhauServer.sh & && echo $! > /var/run/mordhau_server.pid"
   stop_command 'kill -9 $(cat /var/run/mordhau_server.pid)&& rm /var/run/mordhau_server.pid'
   restart_command "kill -9 $(cat /var/run/mordhau_server.pid) && rm /var/run/mordhau_server.pid && nohup #{mordhau_root_dir}/MordhauServer.sh & && echo $! > /var/run/mordhau_server.pid || nohup #{mordhau_root_dir}/MordhauServer.sh &"
-  action start
+  action :start
 end
 #------
 
