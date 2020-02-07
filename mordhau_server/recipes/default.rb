@@ -67,6 +67,7 @@ tar_extract steam_url do
 end
 
 # Creates Mordhau txt file that SteamCMD needs to install or update Mordhau
+# this does not need to be a loop for a single file
 templates = node['mordhau']['templates']['mordhau_txt']
 templates.each do |_template, details|
   template details['target'] do
