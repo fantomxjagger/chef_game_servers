@@ -1,0 +1,55 @@
+#
+#
+if [[ -z $HOST ]] ; then
+        export HOST=`uname -n`
+fi
+
+OSver=`/bin/uname -s`
+
+if [[ "$OSver" = "Linux" ]] ; then
+export USER=`/usr/bin/whoami`
+else [[ "$OSver" = "SunOS" ]]
+export USER=`/usr/ucb/whoami`
+
+fi
+
+#USER=`/usr/ucb/whoami`
+
+MANPATH="/usr/share/man:/usr/openwin/share/man:/usr/openwin/man:/usr/dt/share/man:/usr/dt/man:/usr/bin/man:/usr/man:/opt/SUNWrtvc/man:/usr/local/man:/usr/local/lib/perl5/5.00503/man"
+
+PATH="$HOME/bin:/usr/bin:/usr/local/bin:/usr/sbin:/bin:/usr/ccs/bin:/usr/ucb:/usr/dt/bin:/usr/openwin/bin:/opt/quest/bin:/sbin/:/opt/chef/embedded/bin"
+
+
+
+EDITOR="/bin/vi"
+
+FCEDIT="/bin/vi"
+
+# This line sets up your prompt...
+# Don't modify it unless you know what you are doing...
+
+#PS1='[GROOT@$HOST:$PWD] ->'
+
+export EDITOR FCEDIT PATH PS1 MANPATH
+if [ ! -d $HOME/history ]; then
+  mkdir $HOME/history
+fi
+export HISTFILE="${HOME}/history/.bash_history.`hostname`"
+
+umask 0022
+
+set -o vi
+
+export PS1='†\[\e[1;33m\]\u\[\e[0;31m\]@\h:\w$] ->\[\e[0;0m\]'
+
+# Exports that are useful
+# export CHEF_ORG=ENTER_CHEF_ORG_HERE
+
+# Use this to set your erase key on login.
+
+stty erase ^H
+
+# Add aliases here...samples below.
+
+alias nuke='rm -f'
+alias nukeall='rm -rf'
