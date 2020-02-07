@@ -6,7 +6,7 @@
 #
 # Copyright (c) 2016 The Authors, All Rights Reserved.
 repos = node['mordhau']['yum_repos']
-repos.each do |repo, details|
+repos.each do |_repo, details|
   yum_repository details['name'] do
     enabled details['enabled']
     gpgcheck details['gpgcheck']

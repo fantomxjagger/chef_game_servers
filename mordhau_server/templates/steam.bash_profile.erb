@@ -1,12 +1,230 @@
-# .bash_profile
+#!/bin/env bash
+source ~/.profile
+OS=$(uname)
+KERNEL=$(uname -r)
+MAC_ARCH=$(uname -m)
+HOSTNAME=$(hostname -s)
 
-# Get the aliases and functions
-if [ -f ~/.bashrc ]; then
-        . ~/.bashrc
-fi
+case ${OS} in
+# Windows
+  windowsnt)
+    OS=windows
+    ;;
+# Mac OS X
+  Darwin)
+    OS=$(sw_vers -productName)
+    if [ "${OS}" == "Mac OS X" ]; then
+      OS="Mac OS X"
+      VERSION=$(sw_vers -productVersion)
+      XCODE="/Library/Developer/CommandLineTools"
+      REV=$(sw_vers -buildVersion)
+      if [ -d "${XCODE}" ]; then
+        XCODE_STATUS="Installed"
+      else
+        XCODE_STATUS="Not Installed"
+      fi
+    else
+      OS=Unknown
+    fi
+    ;;
+  SunOS)
+    OS=Solaris
+    ;;
+  AIX)
+    OSSTR="${OS} $(oslevel) ($(oslevel -r))"
+    ;;
+  Linux)
+    if [ -f /etc/redhat-release ] ; then
+      OS='Red Hat'
+    elif [ -f /etc/SuSE-release ] ; then
+      OS='SuSe'
+    elif [ -f /etc/mandrake-release ] ; then
+      OS='Mandrake'
+    elif [ -f /etc/debian_version ] ; then
+      OS='Debian'
+    elif [ -f /etc/UnitedLinux-release ] ; then
+      DIST="${DIST}[$(cat /etc/UnitedLinux-release | tr "\n" ' ' | sed s/VERSION.*//)]"
+    fi
+    ;;
+esac
+case ${OS} in
+  windows)
+    echo "=========="
+    echo "Workstation: $WORKSTATION"
+    echo "Jumpserver: $JUMPSERVER"
+    echo "Operating System: $OS"
+    echo "Distribution: $DIST"
+    echo "Psuedoname: $PSUEDONAME"
+    echo "Revision: $REV"
+    echo "Kernel: $KERNEL"
+    echo "Architecture: $MAC_ARCH"
+    echo "Xcode: $XCODE_STATUS"
+    echo "=========="
+    ;;
+  Darwin)
+    OS=Darwin
+    echo "=========="
+    echo "Workstation: $WORKSTATION"
+    echo "Jumpserver: $JUMPSERVER"
+    echo "Operating System: $OS"
+    echo "Distribution: $DIST"
+    echo "Psuedoname: $PSUEDONAME"
+    echo "Revision: $REV"
+    echo "Kernel: $KERNEL"
+    echo "Architecture: $MAC_ARCH"
+    echo "Xcode: $XCODE_STATUS"
+    echo "=========="
+    ;;
+  "Mac OS X")
+    VERSION=$(sw_vers -productVersion)
+    XCODE="/Library/Developer/CommandLineTools"
+    BASH_SHELL="/opt/local/bin/bash"
+    REV=$(sw_vers -buildVersion)
+    if [ -d "${XCODE}" ]; then
+      XCODE_STATUS="Installed"
+    else
+      XCODE_STATUS="Not Installed"
+    fi
+    if [ -f "${BASH_SHELL}" ]; then
+      alias bash="${BASH_SHELL}"
+    else
+      BASH_SHELL=$(which bash)
+      alias bash="${BASH_SHELL}"
+    fi
+    echo "=========="
+    echo "Workstation: $WORKSTATION"
+    echo "Jumpserver: $JUMPSERVER"
+    echo "Operating System: $OS"
+    echo "Revision: $REV"
+    echo "Kernel: $KERNEL"
+    echo "Architecture: $MAC_ARCH"
+    echo "Xcode: $XCODE_STATUS"
+    echo "=========="
+    export JAVA_HOME=$(/usr/libexec/java_home)
+    export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+    export MANPATH=/opt/local/share/man:$MANPATH
+    export LDFLAGS="-L/opt/local/lib"
+    export CPPFLAGS="-I/opt/local/include"
+    export NOKOGIRI_USE_SYSTEM_LIBRARIES=Y
+    export CC="/opt/local/bin/gcc"
+    export CXX="/opt/local/bin/g++"
 
-# User specific environment and startup programs
+    #export JAVA_HOME="$(/usr/libexec/java_home)"
+    [[ -s "$HOME/.profile" ]] && source "$HOME/.profile" # Load the default .profile
+    [[ -s "$HOME/.bashrc" ]] && source "$HOME/.bashrc" # Load the default .profile
+    [[ -s "$HOME/.bash-git-prompt/gitprompt.sh" ]] && source "$HOME/.bash-git-prompt/gitprompt.sh" # Load Git Prompt into a shell session *as a function*
+    # Finished adapting your PATH environment variable for use with MacPorts.
+    eval "$(gdircolors ~/.dircolors)"
+    eval "$(chef shell-init bash)"
+    alias ls='gls --color=auto'
+    alias port-sync='sudo port -d sync'
+    alias port-upgrade='sudo port upgrade outdated'
+    alias port-index='sudo portindex'
+    alias r='rvm version'
+    alias gco='git checkout $1'
+    ;;
+  SunOS)
+    ARCH=$(uname -p)
+    REV=$(uname -r)
+    OSSTR="${OS} ${REV}(${ARCH} $(uname -v))"
+    echo "=========="
+    echo "Workstation: $WORKSTATION"
+    echo "Jumpserver: $JUMPSERVER"
+    echo "Operating System: $OS"
+    echo "Revision: $REV"
+    echo "Architecture: $MAC_ARCH"
+    echo "$OU"
+    echo "=========="
 
-PATH=$PATH:$HOME/.local/bin:$HOME/bin
+    export TERM=vt100
+    case ${REV} in
+      5.10)
+        export USER=$(/usr/ucb/whoami)
+        ;;
+      5.11)
+        export USER=$(/usr/bin/whoami)
+        ;;
+      esac
+      ;;
+  AIX)
+    OSSTR="${OS} $(oslevel) ($(oslevel -r))"
+    ;;
+  Linux)
+    if [ -x /usr/bin/dircolors ]; then
+      test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    fi
 
-export PATH
+    export USER=$(/usr/bin/whoami)
+    ;;
+  "Red Hat")
+      DIST=$(cat /etc/redhat-release |sed s/\ release.*//)
+      PSUEDONAME=$(cat /etc/redhat-release | sed s/.*\(// | sed s/\)//)
+      REV=$(cat /etc/redhat-release | sed s/.*release\ // | sed s/\ .*//)
+      export USER=$(/usr/bin/whoami)
+      echo "=========="
+      echo "Workstation: $WORKSTATION"
+      echo "Jumpserver: $JUMPSERVER"
+      echo "Operating System: $OS"
+      echo "Distribution: $DIST"
+      echo "Psuedoname: $PSUEDONAME"
+      echo "Revision: $REV"
+      echo "Kernel: $KERNEL"
+      echo "Architecture: $MAC_ARCH"
+      echo "$OU"
+      echo "=========="
+      alias ls='ls --color=auto'
+      alias vi='vim'
+    case ${REV} in
+      5.8)
+        export PATH="$HOME/local/rhel/5.8/bin:$PATH"
+        ;;
+      5.9)
+        ;;
+      5.10)
+        if [ -x /usr/bin/dircolors ]; then
+          test -r ~/.dircolors.rhel5 && eval "$(dircolors -b ~/.dircolors.rhel5)" || eval "$(dircolors -b)"
+        fi
+        export PATH="$HOME/local/rhel/5.10/bin:$PATH"
+        ;;
+      5.11)
+        if [ -x /usr/bin/dircolors ]; then
+          test -r ~/.dircolors.rhel5 && eval "$(dircolors -b ~/.dircolors.rhel5)" || eval "$(dircolors -b)"
+        fi
+        export PATH="$HOME/local/rhel/5.11/bin:$PATH"
+        ;;
+      6.0)
+        export PATH="$HOME/local/rhel/6.0/bin:$PATH"
+        ;;
+      6.1)
+        export PATH="$HOME/local/rhel/6.1/bin:$PATH"
+        ;;
+      6.5)
+        export PATH="$HOME/local/rhel/6.5/bin:$PATH"
+        ;;
+      esac
+      ;;
+    SuSe)
+      DistroBasedOn='SuSe'
+      PSUEDONAME=$(cat /etc/SuSE-release | tr "\n" ' '| sed s/VERSION.*//)
+      REV=$(cat /etc/SuSE-release | tr "\n" ' ' | sed s/.*=\ //)
+      ;;
+    Mandrake)
+      DistroBasedOn='Mandrake'
+      PSUEDONAME=$(cat /etc/mandrake-release | sed s/.*\(// | sed s/\)//)
+      REV=$(cat /etc/mandrake-release | sed s/.*release\ // | sed s/\ .*//)
+      ;;
+    Debian)
+      DistroBasedOn='Debian'
+      DIST=$(cat /etc/lsb-release | grep '^DISTRIB_ID' | awk -F=  '{ print $2 }')
+      PSUEDONAME=$(cat /etc/lsb-release | grep '^DISTRIB_CODENAME' | awk -F=  '{ print $2 }')
+      REV=$(cat /etc/lsb-release | grep '^DISTRIB_RELEASE' | awk -F=  '{ print $2 }')
+      ;;
+esac
+
+readonly OS
+readonly DIST
+readonly DistroBasedOn
+readonly PSUEDONAME
+readonly REV
+readonly KERNEL
+readonly MAC_ARCH
