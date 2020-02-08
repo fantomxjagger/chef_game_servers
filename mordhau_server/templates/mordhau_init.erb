@@ -8,11 +8,11 @@ nohup ./MordhauServer.sh & sleep 10 && pkill -9 Mordhau
 #                 the Mordhau server.
 #
 
-PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
-NAME='Mordhau Server'
-DESC='MordhauServer'
 BASE='<%= node['mordhau']['steam']['mordhau_root_dir'] =%>'
 USER='<%= node['mordhau']['steam']['steam_user'] =%>'
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:$BASE
+NAME='Mordhau Server'
+DESC='MordhauServer'
 KERN=`uname -s`
 if [ -x /$DES ] ; then
         DAEMON=$BASE/$DESC.sh
