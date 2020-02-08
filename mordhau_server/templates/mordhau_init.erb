@@ -14,7 +14,7 @@ PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin:$BASE
 NAME='Mordhau Server'
 DESC='MordhauServer'
 KERN=`uname -s`
-if [ -x /$DES ] ; then
+if [ -x $BASE/$DES ] ; then
         DAEMON=$BASE/$DESC.sh
         PID=/var/run/$DEC.pid
 else
