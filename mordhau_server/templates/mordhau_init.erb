@@ -13,7 +13,6 @@ NAME='Mordhau Server'
 DESC='MordhauServer'
 BASE='<%= node['mordhau']['steam']['mordhau_root_dir'] =%>'
 USER='<%= node['mordhau']['steam']['steam_user'] =%>'
-PID=/var/run/$BIN
 KERN=`uname -s`
 if [ -x /$DES ] ; then
         DAEMON=$BASE/$DESC.sh
