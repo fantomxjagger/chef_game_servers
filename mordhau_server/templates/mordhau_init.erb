@@ -1,0 +1,68 @@
+#!/bin/bash
+nohup ./MordhauServer.sh & sleep 10 && pkill -9 Mordhau
+
+
+#! /bin/sh
+#
+# MordhauServer   This shell script takes care of starting and stopping
+#                 the Mordhau server.
+#
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME='Mordhau Server'
+DESC='MordhauServer'
+BASE='<%= node['mordhau']['steam']['mordhau_root_dir'] =%>'
+USER='<%= node['mordhau']['steam']['steam_user'] =%>'
+PID=/var/run/$BIN
+KERN=`uname -s`
+if [ -x /$DES ] ; then
+        DAEMON=$BASE/$DESC.sh
+        PID=/var/run/$DEC.pid
+else
+        echo "Unable to locate server binaries"
+fi
+
+test -x $DAEMON || exit 0
+
+CMD="$1"
+
+# Include Mordhau Server defaults if available
+
+set -e
+
+case "$CMD" in
+  start)
+        echo -n "Starting $DESC: "
+        su - $USER  -c "nohup $DAEMON & && $! > $PID"
+        echo "$NAME."
+        ;;
+  stop)
+        echo -n "Stopping $DESC: "
+        su - $USER -c  "kill -9 $(cat $PID)"
+        echo "$NAME."
+        ;;
+  restart)
+        echo -n "Restarting $DESC: "
+        su - $USER -c "kill -9 $(cat $PID)"
+        su - $USER -c "nohup $DAEMON & && $! > $PID"
+        echo "$NAME."
+        ;;
+  status)
+        ps ef | grep $DAEMON
+        if [ $? == 0 ]
+         then
+           STATUS='$NAME is running'
+         else
+           STATUS='$NAME is stopped'
+         done
+
+        echo $STATUS
+        ;;
+  *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|status}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
