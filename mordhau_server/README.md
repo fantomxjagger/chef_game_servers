@@ -11,9 +11,10 @@ Bootstrap your node or EC2 with this cookbook, and your server will be configure
 
 Edit the Attributes if you'd like to change the settings of the config files.
 
-Firewall Rules needed - Open 7777,7778,1500 UDP
-
+Firewall Rules needed - Open 7777,7778,1500 UDP Inbound/Outbound
+```
 Cookbook Name:: mordhau_server
 Recipe:: default
 Copyright (c) 2020 Zach Degelau & Jesse Zitterkopf, All Rights Reserved.
 Server build
+```
