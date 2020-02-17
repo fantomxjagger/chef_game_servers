@@ -5,10 +5,11 @@
 # Recipe:: default
 #
 # Copyright (c) 2020 Zach Degelau & Jesse Zitterkopf, All Rights Reserved.
-# Include Yum Repos
+
+# Firewall Rules needed - Open 7777,7778,1500 UDP
 
 # Includes necessary Yum Repositories
-include 'mordhau_server::yum_repos'
+# include_recipe 'mordhau_server::yum_repos'
 
 # Installs Package Dependencies for Mordhau Server
 packages = node['mordhau']['os_pkgs']
@@ -19,16 +20,15 @@ packages.each do |_pkg, details|
   end
 end
 
-# Firewall Rules needed - Open 7777,7778,1500 UDP
-
 # Setup Variables
 steam_user = node['mordhau']['steam']['user']
 steam_group = node['mordhau']['steam']['group']
 steam_shell = node['mordhau']['steam']['user_shell']
 steam_home = node['mordhau']['steam']['user_home']
-# steam_cmd_url = node['mordhau']['steam']['steamcmd_url']
 steam_cmd_install_mordhau = node['mordhau']['steam']['steamcmd_install_mordhau']
 mordhau_root_dir = node['mordhau']['steam']['mordhau_root_dir']
+mordhau_mod_pack_dir = node['mordhau']['steam']['mordhau_mod_pack']
+# steam_cmd_url = node['mordhau']['steam']['steamcmd_url']
 
 # Creates Steam User Account on the System
 user steam_user do
@@ -119,6 +119,7 @@ templates.each do |_template, details|
     action :create
   end
 end
+
 #-----------------------------------------------------------------
 # Now it actually starts the Mordhau game server
 execute 'Start Mordhau Server' do
